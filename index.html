@@ -23,17 +23,19 @@
                         <label for="numberInput" class="form-label">Tipp</label>
                         <input 
                             type="number" 
-                            class="form-control js-guess-field" 
+                            class="form-control is-invalid js-guess-field" 
                             id="numberInput" 
                             aria-describedby="emailHelp"
                             min="1"
                             max="100"
                             step="1"
-                            name="guess">
+                            name="guess"
+                            required>
+                        <div class="invalid-feedback">Adj meg egy helyes tippet!</div>
                         <div id="emailHelp" class="form-text">Adj meg egy egész számot 1 és 100 között.</div>
                     </div>
                     <div class="mb-3 form-check col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
-                        <button type="submit" class="btn btn-success">Tipp beküldése</button>
+                        <button type="submit" class="btn btn-success js-submit-guess">Tipp beküldése</button>
                         <button class="btn btn-warning js-new-game-button">Új játék</button>
                     </div>
                 </div>
