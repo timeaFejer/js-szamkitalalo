@@ -1,7 +1,9 @@
-let guessListContainer = document.querySelector('js-guess-container');  //a változónév elé írhatunk $ jelet, ezzel is jelölve, hogy dokumentum csomópont 
-let currentGuessField = document.querySelector('js-guess-field');
-let newGameButton = document.querySelector('js-new-game-button');
+//a változónév elé írhatunk $ jelet, ezzel is jelezve, hogy ez egy dokumentum csomópont, de ez nem kötelező
+let guessListContainer = document.querySelector('.js-guess-container');  
+let currentGuessField = document.querySelector('.js-guess-field');
+let newGameButton = document.querySelector('.js-new-game-button');
 
+// Amíg kezdők vagyunk, valahogy kommunikálniuk kell egymással a fgv-eknek, ezért globális változót fogunk használni.
 let target;
 
 function generateTarget() {
@@ -21,5 +23,5 @@ function startGame() {
 }
 
 startGame();
-newGameButton.addEventListener('click', startGame)
+newGameButton.addEventListener('click', startGame);
 
