@@ -6,6 +6,14 @@ let guessSubmitButton = document.querySelector('.js-submit-guess');
 
 // Amíg kezdők vagyunk, valahogy kommunikálniuk kell egymással a fgv-eknek, ezért globális változót fogunk használni.
 let target;
+let gameOver = false;
+let guessList = [];
+
+const guessResults = {
+    KISEBB: 'kisebb',
+    NAGYOBB: 'nagyobb',
+    HELYES: 'talált'
+}
 
 function generateTarget() {
     return Math.floor(Math.random() * 100 ) + 1;
@@ -13,9 +21,12 @@ function generateTarget() {
 
 function resetGame() {
     // korábbi tippek törlése
-    guessListContainer.innerHTML = "";
+    guessList = [];
+    renderGuessList();
     // input mező tartalmának törlése
     currentGuessField.value = "";
+    // engedünk tippelni
+    gameOver = false;
 }
 
 function startGame() {
@@ -23,13 +34,30 @@ function startGame() {
     target = generateTarget();
 }
 
+function addGuess(guessValue, result) {
+    guessList.unshift({guessValue, result});
+}
+
+function compareGuessToTarget(guess) {
+    if (guess < target) {
+        addGuess(guess, guessResults.NAGYOBB);
+    } else if ( guess> target) {
+        addGuess(guess, guessResults.KISEBB);
+    } else {
+        addGuess(guess, guessResults.HELYES);
+        gameOver = true;
+    }
+    renderGuessList();
+}
+
 function submitGuess(event) {
     event.preventDefault();
-    let guessValue = Number.parseInt(currentGuessField.value);
-    console.log(guessValue, typeof guessValue);
-    if (validateGuess()) {
-        alert("Klikk");
-    } 
+    if (!gameOver) {
+        let guessValue = Number.parseInt(currentGuessField.value);
+        if (validateGuess()) {
+            compareGuessToTarget(guessValue);
+        } 
+    }
 }
 
 function addGuessValidation() {
@@ -49,6 +77,33 @@ function validateGuess() {
     }
     removeGuessValidation();
     return true;
+}
+
+function renderGuessList() {
+    let html = "";
+    let guessType, guessText;
+
+    for (let {guessValue, result} of guessList) {
+        if (result === guessResults.KISEBB) {
+            guessType = 'warning';
+            guessText = "A keresett szám kisebb.";
+        } else if (result === guessResults.NAGYOBB) {
+            guessType = 'primary';
+            guessText = "A keresett szám nagyobb.";
+        } else {
+            guessType = 'success';
+            guessText = `Gratulálok, eltaláltad! Tippek száma: ${guessList.length}`;
+        }
+        html += `
+            <div class="row">
+                <div class="col col-12 col-md-8 offset-md-2 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4 alert alert-${guessType}" role="alert">
+                    ${guessValue} - ${guessText}
+                </div>
+            </div>
+        `;
+    }
+
+    guessListContainer.innerHTML = html;
 }
 
 startGame();
